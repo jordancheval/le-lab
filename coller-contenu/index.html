@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contenu collage</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     html {
       font-size: 10px;
     }
@@ -12,10 +16,15 @@
     body {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: auto 1fr;
+      grid-template-rows: repeat(2, auto) 1fr;
       gap: 1rem;
       font-family: monospace;
       font-size: 1.6rem;
+      margin: 0;
+      padding: 1rem;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
     }
 
     div.plain,
@@ -25,12 +34,28 @@
       height: 100%;
       padding: 1rem 2rem;
       box-shadow: 0 0 10px -3px #9E9E9E inset;
+      white-space: pre;
+      overflow: auto;
+    }
+
+    p {
+      grid-column: span 2;
+    }
+
+    button {
+      border: none;
+      background-color: #80CBC4;
+      font-family: inherit;
+      padding: 0.2rem 1rem;
+      border-radius: 0.4rem;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <span>text/plain</span>
-  <span>text/html</span>
+  <p>Copier un texte de n'importe quelle application ou page web, puis faire <b>Ctrl + V</b> ou <b>Cmd + V</b> sur cette page.</p>
+  <span>text/plain <button onclick="copierDansPressePapier('div.plain')">COPIER</button></span>
+  <span>text/html <button onclick="copierDansPressePapier('div.html')">COPIER</button></span>
   <div class="plain"></div>
   <div class="html"></div>
   <script>
@@ -41,6 +66,14 @@
       html.textContent = event.clipboardData.getData('text/html')
       plain.textContent = event.clipboardData.getData('text/plain')
     })
+
+    function copierDansPressePapier(selecteur) {
+      const element = document.querySelector(selecteur)
+
+      navigator.clipboard.writeText(element.textContent).then().catch((erreur) => {
+        console.error(erreur)
+      })
+    }
   </script>
 </body>
 </html>
